@@ -1,7 +1,9 @@
 require('./config/config');
 
 const express = require('express')
-const app = express()
+const mongoose = require('mongoose');
+
+const app = express();
 
 const bodyParser = require('body-parser');
 
@@ -9,28 +11,13 @@ app.use(bodyParser.urlencoded({ extended: false }))
 
 app.use(bodyParser.json())
 
-app.get('/usuario', function(req, res) {
-    res.json('get Usuario')
-});
+app.use(require('./routes/usuario'));
 
-app.post('/usuario', function(req, res) {
+mongoose.connect('mongodb://localhost:27017/cafe', (err, rest) => {
 
-    let body = req.body;
+    if (err) throw err;
 
-    res.json({
-        persona: body
-    })
-});
-
-app.put('/usuario/:id', function(req, res) {
-    let id = req.params.id;
-    res.json({
-        id
-    });
-});
-
-app.delete('/usuario', function(req, res) {
-    res.json('delete Usuario')
+    console.log('Base de datos Online');
 });
 
 app.listen(process.env.PORT, () => {
